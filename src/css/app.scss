@@ -1,0 +1,49 @@
+// app global css in SCSS form
+.logo {
+  &-small {
+    height: 125px;
+    width: 182px;
+  }
+}
+.login {
+  &-card {
+    width: 100%;
+    max-width: 1000px;
+    min-width: 300px;
+    overflow: hidden;
+  }
+}
+
+.linkify {
+  cursor: pointer;
+  &:active {
+    color: rgb(85, 26, 139);
+  }
+}
+.main-panel {
+  max-height: 600px;
+}
+.no {
+  &-caps {
+    text-transform: capitalize;
+  }
+  &-overflow {
+    overflow: hidden;
+  }
+}
+a {
+  text-decoration: none;
+}
+
+.text {
+  &-white {
+    color: #fff;
+  }
+}
+
+.theme-color {
+  color: #7cbcdd;
+  &-bg {
+    background-color: #7cbcdd;
+  }
+}
