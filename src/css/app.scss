@@ -1,4 +1,12 @@
 // app global css in SCSS form
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #000;
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  transition: #fff 300ms ease-in-out 0s;
+}
+
 .logo {
   &-small {
     height: 125px;
@@ -13,7 +21,6 @@
     overflow: hidden;
   }
 }
-
 .linkify {
   cursor: pointer;
   &:active {
@@ -42,8 +49,22 @@ a {
 }
 
 .theme-color {
-  color: #7cbcdd;
+  
   &-bg {
-    background-color: #7cbcdd;
+    &-primary {
+      background-color: $primary;
+    }
+    &-secondary {
+      background-color: $secondary;
+    }
+  }
+  
+  &-text {
+    &-primary {
+      color: $primary;
+    }
+    &-secondary {
+      color: $secondary;
+    }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <q-dialog ref="registerDialog">
     <q-card style="min-width: 350px">
-      <q-card-section class="theme-color-bg">
+      <q-card-section class="theme-color-bg-primary">
         <div class="text-h6 text-white">User Registration</div>
       </q-card-section>
       <q-card-section>
@@ -149,14 +149,17 @@ export default defineComponent({
 
       if (continueProcess) {
         console.log("submitting form");
-        await fetch(
-          "http://localhost:1337/api/auth/local/register",
-          this.newUserInfo
-        )
+        const payload = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.newUserInfo),
+        };
+        await fetch("http://localhost:1337/api/auth/local/register", payload)
           .then((response) => response.json())
           .then((data) => {
             console.log("registration response contains: " + data);
             this.resetValidation();
+            this.clearForm();
             this.$emit("ok", this.newUserInfo);
           });
       }
@@ -172,6 +175,14 @@ export default defineComponent({
       this.inputRefs.every((key) => {
         this.$refs[key].resetValidation();
       });
+    },
+    clearForm() {
+      this.newUserInfo = {
+        username: "",
+        password: "",
+        email: "",
+        name: "",
+      };
     },
   },
 });

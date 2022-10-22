@@ -1,5 +1,10 @@
 <template>
   <q-page class="flex flex-center">
+    <!--<q-toolbar class="text-primary fixed-top">
+      <q-btn flat round dense icon="assignment_ind" />
+      <q-toolbar-title>Contact Lookup Page</q-toolbar-title>
+    </q-toolbar>-->
+    <!--<Account-Toolbar title="Contact Lookup" />-->
     <q-card flat>
       <q-card-section horizontal>
         <q-card-section class="q-pa-none">
@@ -23,7 +28,7 @@
               :class="[
                 'q-py-sm',
                 'items-center',
-                { selected: selectedContact.id == contact.id },
+                { selected: selectedContact && selectedContact.id == contact.id },
               ]"
               clickable
               v-ripple
@@ -87,59 +92,76 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
+import { useMyStore } from "stores/main"
 
 export default defineComponent({
   name: "ContactLookupPage",
+  components: {
+    //AccountToolbar
+  },
+  setup() {
+    const store = useMyStore()
+    return {
+      store
+    }
+  },
   data() {
     return {
       contacts: [],
       contactSearchText: "",
       selectedContact: null,
-    };
+      editMode: false
+    }
   },
   computed: {
     searchContacts() {
       if (!this.contactSearchText.length) {
-        return this.contacts;
+        return this.contacts
       }
       //return filtered version of contacts, filtering for whatever the search text is
       let results = this.contacts.filter((contact) => {
         return contact.attributes.Name.toLowerCase().includes(
           this.contactSearchText.toLowerCase()
-        );
-      });
-      return results;
+        )
+      })
+      return results
     },
   },
   methods: {
     async fetchContacts() {
-      await fetch("http://localhost:1337/api/contacts?populate=%2A")
+      let user = JSON.parse(window.localStorage.getItem('hs-user'))
+      console.log('userId retrieved: ' + user.id)
+      await fetch(`http://localhost:1337/api/contacts?populate=%2A&filters[UserId][$eq]=${user.id}`)
         .then((response) => response.json())
         .then((data) => {
-          this.contacts = data.data;
-        });
+          this.contacts = data.data
+        })
     },
     getContactInitial(name) {
-      return name ? name.charAt(0) : "";
+      return name ? name.charAt(0) : ""
     },
     searchForContact() {
-      console.log("search text entered: " + this.contactSearchText);
+      console.log("search text entered: " + this.contactSearchText)
       if (this.contactSearchText.length) {
       }
     },
     selectContact(contact) {
-      console.log("contact selected!");
-      this.selectedContact = contact;
+      console.log("contact selected!")
+      this.selectedContact = contact
     },
   },
   mounted() {
-    console.log("contactlookuppage mounted!!");
-    this.fetchContacts();
+    console.log("contactlookuppage mounted!!")
+    this.store.$subscribe((mutation, state) => {
+      console.log('store change detected in lookup page!!')
+    })
+
+    this.fetchContacts()
   },
   watch: {
     contacts(newValue, oldValue) {
-      console.log("contacts record change detected!");
+      console.log("contacts record change detected!")
     },
   },
 });
