@@ -86,7 +86,7 @@
 import { dom } from 'quasar'
 import { defineComponent } from "vue";
 import RegistrationDialog from "components/RegistrationDialog.vue";
-import { useMyStore } from "stores/main"
+import { useAuthStore } from "stores/auth"
 
 export const detectAutofill = (element) => {
   const { style } = dom
@@ -106,6 +106,10 @@ export default defineComponent({
   },
   data() {
     return {
+      user: {
+        username: "",
+        password: ""
+      },
       username: "",
       usernameEntered: false,
       password: "",
@@ -148,17 +152,17 @@ export default defineComponent({
         })*/
       //if form fields are validated, submit request
       if (this.validateLoginForm()) {
-        const store = useMyStore()
+        const store = useAuthStore()
 
-        const payload = {
+        /*const payload = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             identifier: this.username,
             password: this.password,
           }),
-        }
-        await fetch("http://localhost:1337/api/auth/local", payload)
+        }*/
+        /*await fetch("http://localhost:1337/api/auth/local", payload)
           .then((response) => response.json())
           .then((data) => {
             //read jwt from successful response, store appropriately, and redirect to the home page
@@ -177,7 +181,7 @@ export default defineComponent({
               })
               this.$router.push({ path: "/lookup" })
             }
-          })
+          })*/
       }
     },
     previewSite() {
