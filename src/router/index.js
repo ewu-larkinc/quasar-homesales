@@ -4,8 +4,10 @@ import {
   createMemoryHistory,
   createWebHistory,
   createWebHashHistory,
+  routerKey,
 } from "vue-router";
 import routes from "./routes";
+import { useAuthStore } from "src/stores/auth";
 
 /*
  * If not building with SSR mode, you can
@@ -29,6 +31,22 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach(async (to) => {
+    const authStore = useAuthStore();
+    console.log('router beforeEach function executing!');
+    if (!authStore.user) {
+      console.log('user not logged in! Path: ' + to.fullPath);
+      authStore.returnUrl = to.fullPath;
+
+      //only redirect to login ("/") if its not already the current route
+      if (to.fullPath !== "/") {
+        return '/';
+      }
+    } else {
+      console.log('user is logged in!');
+    }
   });
 
   return Router;
