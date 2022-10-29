@@ -1,13 +1,13 @@
 <template>
     <div class="q-pa-none">
-      <q-header elevated v-if="isAuthenticated">
+      <q-header elevated>
         <q-toolbar class="fixed-top bg-primary">
             <q-btn flat round dense icon="assignment_ind" @click="drawer = !drawer" />
             <q-toolbar-title>{{ title }}</q-toolbar-title>
         </q-toolbar>
       </q-header>
-      <q-drawer v-model="drawer" :width="300" :breakpoint="500" bordered class="bg-grey-3">
-          <q-img class="absolute-top" src="~assets/menu-bg-1.jpg" style="height: 120px;">
+      <q-drawer v-model="drawer" :width="300" :breakpoint="500" bordered class="bg-grey-3" style="">
+          <q-img class="absolute" src="~assets/menu-bg-1.jpg" style="height: 120px; top: 50px;">
               <div class="absolute-bottom bg-transparent">
                   <q-avatar size="56px" class="q-mb-sm">
                   <img :src="userAvatar">
@@ -15,13 +15,29 @@
                   <div class="text-weight-bold">{{ user.name }}</div>
               </div>
           </q-img>
-              <q-list bordered separator style="margin-top:120px">
+              <q-list bordered separator style="margin-top:170px">
                   <q-item clickable v-ripple @click="gotoAccount()" class="theme-color-text-primary">
                       <q-item-section avatar>
                           <q-icon name="badge" />
                       </q-item-section>
                       <q-item-section>
                           Account Info
+                      </q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple @click="goTo('/lookup')" class="theme-color-text-primary">
+                      <q-item-section avatar>
+                          <q-icon name="contacts" />
+                      </q-item-section>
+                      <q-item-section>
+                          Contacts
+                      </q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple @click="goTo('/groups')" class="theme-color-text-primary">
+                      <q-item-section avatar>
+                          <q-icon name="groups" />
+                      </q-item-section>
+                      <q-item-section>
+                          Contact Groups
                       </q-item-section>
                   </q-item>
                   <q-item clickable v-ripple @click="logout()" class="theme-color-text-primary">
@@ -38,6 +54,7 @@
 </template>
 <script>
     import { defineComponent } from 'vue'
+    import { useAuthStore } from "stores/auth"
 
     export default defineComponent({
         name: "AccountToolbar",
@@ -49,8 +66,7 @@
         },
         data() {
             return {
-                drawer: false,
-                isAuthenticated: false,
+                drawer: true,
                 user: {
                     name: '',
                     avatar: ''
@@ -69,10 +85,14 @@
         },
         methods: {
             logout() {
-                //clear local storage of jwt, and redirect to login
+                const store = useAuthStore()
+                store.logout()
             },
             gotoAccount() {
 
+            },
+            goTo(path) {
+                this.$router.push(path)
             }
         },
         computed: {
