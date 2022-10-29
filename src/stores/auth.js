@@ -1,14 +1,12 @@
 import { defineStore } from 'pinia'
-import { router } from '@/router'
-import LoginPageVue from 'src/pages/LoginPage.vue'
 
 const baseUrl = import.meta.env.CLIENT_URL
 
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    user: JSON.parse(localStorage.getItem('hs-user')),
-    jwt: JSON.parse(localStorage.getItem('hs-jwt')),
+    user: localStorage.getItem('hs-user') ? JSON.parse(localStorage.getItem('hs-user')) : null,
+    jwt: localStorage.getItem('hs-jwt'),
     returnUrl: null
   }),
 
@@ -27,7 +25,7 @@ export const useAuthStore = defineStore({
         const user = await fetch("http://localhost:1337/api/auth/local", payload)
         .then((response) => response.json())
           .then((data) => {
-            //read jwt from successful response, store appropriately, and redirect to the home page
+            //read user/jwt from successful response, store appropriately, and redirect to the home page
             const { jwt, user } = data
 
             //update pinia state
@@ -36,18 +34,27 @@ export const useAuthStore = defineStore({
 
             console.log('response contains: ' + JSON.stringify(data))
             console.log('jwt contains: ' + jwt)
+
+            // store user details and jwt in local storage to keep user logged in between page refreshes
+            localStorage.setItem('hs-user', JSON.stringify(user))
+            localStorage.setItem('hs-jwt', jwt)
             
+            this.router.push('/lookup')
         })
       } catch (error) {
-
+        console.log('error occurred during login process: ' + error.message)
       }
     },
     logout() {
-      this.user = null
-      this.jwt = null
-      localStorage.removeItem('hs-user')
-      localStorage.remvoeItem('hs-jwt')
-      router.push('/')
+      try {
+        this.user = null
+        this.jwt = null
+        localStorage.removeItem('hs-user')
+        localStorage.removeItem('hs-jwt')
+        this.router.push('/')
+      } catch (error) {
+        console.log('An error occurred during logout')
+      }
     }
   }
 })

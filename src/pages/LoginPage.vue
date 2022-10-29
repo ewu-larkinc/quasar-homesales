@@ -152,7 +152,8 @@ export default defineComponent({
         })*/
       //if form fields are validated, submit request
       if (this.validateLoginForm()) {
-        const store = useAuthStore()
+        const authStore = useAuthStore()
+        await authStore.login(this.username, this.password)
 
         /*const payload = {
           method: "POST",
