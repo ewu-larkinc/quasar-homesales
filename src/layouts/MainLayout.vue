@@ -72,12 +72,6 @@ export default defineComponent({
     console.log('mainLayout mounted!!!')
   },
 
-  watch: {
-    user(newValue, oldValue) {
-        console.log("user record change detected!")
-    },
-  },
-
   setup() {
     const leftDrawerOpen = ref(false);
 
