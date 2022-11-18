@@ -1,4 +1,29 @@
 // app global css in SCSS form
+@font-face {
+  font-family: BarlowCondensed-Regular;
+  src: url('./fonts/BarlowCondensed-Regular.ttf')
+}
+
+@font-face {
+  font-family: Hind-Regular;
+  src: url('./fonts/Hind-Regular.ttf');
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url('./fonts/Montserrat-VariableFont_wght.ttf')
+}
+
+@font-face {
+  font-family: Montserrat-Italic;
+  src: url('./fonts/Montserrat-Italic-VariableFont_wght.ttf');
+}
+
+body {
+  font-family: Hind-Regular;
+}
+
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -48,23 +73,35 @@ a {
   }
 }
 
-.theme-color {
-  
-  &-bg {
-    &-primary {
-      background-color: $primary;
+.theme {
+
+  &-color {
+    
+    &-bg {
+      &-primary {
+        background-color: $primary;
+      }
+      &-secondary {
+        background-color: $secondary;
+      }
     }
-    &-secondary {
-      background-color: $secondary;
+    
+    &-text {
+      &-primary {
+        color: $primary;
+      }
+      &-secondary {
+        color: $secondary;
+      }
     }
   }
-  
-  &-text {
+
+  &-font {
     &-primary {
-      color: $primary;
+      font-family: Hind-Regular;
     }
     &-secondary {
-      color: $secondary;
+      font-family: Montserrat;
     }
   }
 }

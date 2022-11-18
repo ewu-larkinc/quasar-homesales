@@ -4,14 +4,11 @@
         <q-btn flat round dense icon="assignment_ind" />
         <q-toolbar-title>Contact Lookup Page</q-toolbar-title>
       </q-toolbar>-->
-      <Account-Toolbar title="Contact Lookup" />
+      <Account-Toolbar title="Contact Lookup" selected-tab="lookup" :contacts="contacts" />
       <q-card flat>
         <q-card-section horizontal>
           <q-card-section class="search-panel q-pa-none">
-            <q-list bordered separator>
-              <!--<q-toolbar class="bg-primary text-white">
-                <q-toolbar-title>Contacts</q-toolbar-title>
-              </q-toolbar>-->
+            <!--<q-list bordered separator>
               <q-item class="q-pa-none">
                 <q-input
                   v-model="contactSearchText"
@@ -40,7 +37,6 @@
                 <q-item-section side>
                     <q-btn size="10px" icon="chevron_right" flat color="primary" style="width: 35px;"  />
                 </q-item-section>
-                <!--<q-btn label="Add New Contact" icon="person_add" color="secondary" text-color="white" @click="toggleAddNewContact()" />-->
               </q-item>
               <q-item
                 v-for="contact in searchContacts"
@@ -81,10 +77,10 @@
                     <q-btn size="10px" icon="details" flat color="primary" @click="callContact()" style="width: 35px;"  />
                 </q-item-section>
               </q-item>
-            </q-list>
+            </q-list>-->
           </q-card-section>
           <q-card-section class="info-panel q-pa-none q-ml-md">
-            <q-card bordered flat class="">
+            <q-card v-if="editMode" bordered flat class="">
               <q-card-section class="q-pa-none">
                 <!-- Avatar Image, Name and Email-->
                 <q-card-section horizontal class="items-center bottom-border">
@@ -121,7 +117,7 @@
                     <Editable-Field label="Name" :original-value="selectedContact.attributes.name" :edit-mode="editMode" @value-updated="fieldUpdated" />
                   </q-card-section>
                   <!--Edit button-->
-                  <q-card-section class="q-pa-none">
+                  <q-card-section v-if="editMode" class="q-pa-none">
                     <q-icon name="edit" @click="toggleEditMode()" size="sm"/>
                   </q-card-section>
                 </q-card-section>
@@ -143,7 +139,7 @@
                 </q-card-section>
                 <q-card-section horizontal class="q-pa-sm justify-between">
                   <Editable-Field label="Birthday" :original-value="selectedContact.attributes.birthDate" :edit-mode="editMode" @value-updated="fieldUpdated" is-date-field />
-                  <Editable-Field label="Housiversary" :original-value="selectedContact.attributes.housiversary" :edit-mode="editMode" @value-updated="fieldUpdated" is-date-field />
+                  <Editable-Field label="Housiversary" :original-value="selectedContact.attributes.housiversary" :edit-mode="editMode" @value-updated="fieldUpdated" is-date-field class="q-mx-xs" />
                   <Editable-Field label="Anniversary" :original-value="selectedContact.attributes.anniversary" :edit-mode="editMode" @value-updated="fieldUpdated" is-date-field />
                 </q-card-section>
                 <q-card-section>

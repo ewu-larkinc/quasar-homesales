@@ -24,7 +24,7 @@ export const useAuthStore = defineStore({
 
         const user = await fetch("http://localhost:1337/api/auth/local", payload)
         .then((response) => response.json())
-          .then((data) => {
+          .then(async (data) => {
             //read user/jwt from successful response, store appropriately, and redirect to the home page
             const { jwt, user } = data
 
@@ -35,9 +35,25 @@ export const useAuthStore = defineStore({
             console.log('response contains: ' + JSON.stringify(data))
             console.log('jwt contains: ' + jwt)
 
+            //need to pull additional user info - avatar
+            await fetch("http://localhost:1337/api/users/me?populate=%2A", {
+              method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwt}`
+                }
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+              console.log('/users/me data: ' + JSON.stringify(data))
+              user.avatar = data.avatar
+
+              localStorage.setItem('hs-user', JSON.stringify(user))
+              localStorage.setItem('hs-jwt', jwt)
+            })
+
             // store user details and jwt in local storage to keep user logged in between page refreshes
-            localStorage.setItem('hs-user', JSON.stringify(user))
-            localStorage.setItem('hs-jwt', jwt)
+            
             
             this.router.push('/lookup')
         })

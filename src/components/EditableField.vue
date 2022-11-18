@@ -1,5 +1,5 @@
 <template>
-    <q-input v-if="isDateField" v-model="fieldValue" :rules="['fieldValue']" readonly outlined :label="label" stack-label class="">
+    <q-input v-if="isDateField" v-model="fieldValue" :rules="['fieldValue']" readonly outlined :label="label" stack-label class="dateWidth">
         <template v-slot:append>
             <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -22,7 +22,7 @@
         @change="updateValue"
     />
     <template v-else>
-        <q-item-section :class="['q-pa-sm', 'controlHeight', { controlWidth: !reduceWidth, reducedWidth: reduceWidth }]" top style="border: 1px solid rgba(0,0,0,0.15); border-radius: 2px;">
+        <q-item-section :class="['q-pa-sm', 'controlHeight', { controlWidth: !reduceWidth, reducedWidth: reduceWidth }]" top style="border-bottom: 1px solid rgba(0,0,0,0.15); border-radius: 2px;">
             <q-item-label caption>{{ label }}</q-item-label>
             <q-item-label>{{ fieldValue }}</q-item-label>
         </q-item-section>
@@ -103,6 +103,11 @@
 .reduced {
     &Width {
         max-width: 100px;
+    }
+}
+.date {
+    &Width {
+        max-width: 150px;
     }
 }
 </style>
