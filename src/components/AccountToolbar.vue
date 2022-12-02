@@ -13,11 +13,11 @@
             <q-btn flat round dense icon="menu" @click="drawerRight = !drawerRight" />
         </q-toolbar>
       </q-header>
-      <q-drawer v-model="drawerLeft" :width="400" :breakpoint="500" bordered class="bg-grey-3" style="">
+      <q-drawer v-model="drawerLeft" :width="400" :breakpoint="500" bordered class="bg-grey-3" style="margin-top: 50px;">
         <q-list v-if="props.contacts" bordered separator>
               <q-item class="q-pa-none">
                 <q-input
-                  v-model="contactSearchText"
+                  v-model="searchText"
                   filled
                   label="Search"
                   stack-label
@@ -64,7 +64,7 @@
                         <q-img :src="`${apiBaseUrl}${contact.attributes.photo.data.attributes.url}`" class="full-height" />
                     </template>
                     <template v-else>
-                        {{ getContactInitial(contact.attributes.name) }}
+                        {{ getInitials(contact.attributes.name) }}
                     </template>
                   </q-avatar>
                 </q-item-section>
@@ -138,9 +138,10 @@
     </div>
 </template>
 <script setup>
-    import { computed, defineProps, onMounted, ref, reactive } from 'vue'
+    import { computed, defineEmits, defineProps, onMounted, ref, reactive } from 'vue'
     import { useRoute, useRouter } from 'vue-router'
     import { useAuthStore } from "stores/auth"
+    import getInitials from 'src/js/utilities'
     import EditableField from 'components/EditableField.vue'
 
     const store = useAuthStore()
@@ -167,7 +168,27 @@
     let user = reactive({
             name: '',
             avatar: ''
-        })
+    })
+    let selectedContact = reactive({
+        attributes: {
+            name: '',
+            streetAddress: '',
+            city: '',
+            state: '',
+            zipcode: '',
+            email: '',
+            phone: '',
+            photo: {
+                data: null
+            },
+            housiversary: '',
+            anniversary: '',
+            birthDate: ''
+        },
+        groups: []
+    })
+
+    let emit = defineEmits(['contact-selected'])
 
     onMounted(async() => {
         console.log('testing')
@@ -177,6 +198,27 @@
         console.log('user contains: ' + JSON.stringify(user.value))
         console.log('jwt contains: ' + store.jwt)
     })
+
+    function resetSelectedContact() {
+        selectedContact = {
+            attributes: {
+                name: '',
+                streetAddress: '',
+                city: '',
+                state: '',
+                zipcode: '',
+                email: '',
+                phone: '',
+                photo: {
+                    data: null
+                },
+                housiversary: '',
+                anniversary: '',
+                birthDate: ''
+            },
+            groups: []
+        }
+    }
 
     function navigateToPage(selected) {
         router.push(selected)
@@ -191,6 +233,22 @@
         console.log('for type: ' + val.type)
         //now update type with new value (within selectedContact)
         //e.g. this.selectedContact.attributes[val.type] = val.newValue 
+    }
+
+    function searchForContact() {
+        console.log("search text entered: " + searchText.value)
+        if (searchText.value.length) {
+        }
+    }
+
+    function selectContact(contact) {
+        console.log("contact selected in account toolbar! ")
+        if (selectedContact.id == contact.id) {
+            resetSelectedContact()
+        } else {
+            selectedContact = contact
+        }
+        emit('contact-selected', contact)
     }
 
     const userAvatar = computed(() => {
