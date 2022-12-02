@@ -1,7 +1,11 @@
 <template>
     <q-page class="flex flex-center">
         <Account-Toolbar title="Contact Groups" selected-tab="groups" />
-        <q-card flat>
+        <Account-Toolbar title="Contact Lookup" selected-tab="lookup" :contacts="contacts" @contact-selected="selectContact" />
+        <div class="row justify-center q-gutter-md" style="margin-top: 50px;">
+            <contact-record v-for="(contact, index) in searchContacts" :key="index" :contact-info="contact" :edit-mode="editMode" />
+        </div>
+        <!--<q-card flat>
             <q-card-section horizontal>
                 <q-card-section class="search-panel q-pa-none">
                     <q-list bordered separator>
@@ -33,16 +37,6 @@
                             v-ripple
                             @click="selectContactGroup(group)"
                         >
-                        <!--<q-item-section avatar class="">
-                            <q-avatar size="48px" color="primary" text-color="white">
-                                <template v-if="group.attributes.photo.data && group.attributes.photo.data.attributes">
-                                    <q-img :src="`${apiBaseUrl}${group.attributes.photo.data.attributes.url}`" />
-                                </template>
-                                <template v-else>
-                                    {{ getContactInitial(contact.attributes.name) }}
-                                </template>
-                            </q-avatar>
-                        </q-item-section>-->
                             <q-item-section>
                                 <q-item-label overline>
                                     {{ group.attributes.name }}
@@ -54,37 +48,6 @@
                         </q-item>
                     </q-list>
                 </q-card-section>
-                <!-- use as template below -->
-                <!--<q-card class="my-card" flat bordered>
-                    <q-item>
-                        <q-item-section avatar>
-                            <q-avatar>
-                                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                            </q-avatar>
-                        </q-item-section>
-
-                        <q-item-section>
-                        <q-item-label>Title</q-item-label>
-                        <q-item-label caption>
-                            Subhead
-                        </q-item-label>
-                        </q-item-section>
-                    </q-item>
-
-                    <q-separator />
-
-                    <q-card-section horizontal>
-                        <q-card-section>
-                        {{ lorem }}
-                        </q-card-section>
-
-                        <q-separator vertical />
-
-                        <q-card-section class="col-4">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </q-card-section>
-                    </q-card-section>
-                </q-card>-->
                 <q-card-section class="info-panel q-pt-none">
                     <q-card v-if="selectedContactGroup.value.id > 0">
                         <q-card-section horizontal>
@@ -137,7 +100,7 @@
                     </q-card>
                 </q-card-section>
             </q-card-section>
-        </q-card>
+        </q-card>-->
     </q-page>
 </template>
 <script setup>

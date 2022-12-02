@@ -4,11 +4,14 @@
         <q-btn flat round dense icon="assignment_ind" />
         <q-toolbar-title>Contact Lookup Page</q-toolbar-title>
       </q-toolbar>-->
-      <Account-Toolbar title="Contact Lookup" selected-tab="lookup" :contacts="contacts" />
-      <q-card flat>
+      <Account-Toolbar title="Contact Lookup" selected-tab="lookup" :contacts="contacts" @contact-selected="selectContact" />
+      <div class="row justify-center q-gutter-md" style="margin-top: 50px;">
+          <contact-record v-for="(contact, index) in searchContacts" :key="index" :contact-info="contact" :edit-mode="editMode" />
+      </div>
+      <!--<q-card flat>
         <q-card-section horizontal>
           <q-card-section class="search-panel q-pa-none">
-            <!--<q-list bordered separator>
+            <q-list bordered separator>
               <q-item class="q-pa-none">
                 <q-input
                   v-model="contactSearchText"
@@ -77,64 +80,33 @@
                     <q-btn size="10px" icon="details" flat color="primary" @click="callContact()" style="width: 35px;"  />
                 </q-item-section>
               </q-item>
-            </q-list>-->
+            </q-list>
           </q-card-section>
           <q-card-section class="info-panel q-pa-none q-ml-md">
             <q-card v-if="editMode" bordered flat class="">
               <q-card-section class="q-pa-none">
-                <!-- Avatar Image, Name and Email-->
                 <q-card-section horizontal class="items-center bottom-border">
-                    <!-- Avatar (or simple button if contact hasn't added one yet)-->
                   <q-card-section class="items-center text-center">
                     <q-avatar rounded size="50px">
-                      <!--<q-btn
-                        v-if="(!selectedContact || selectedContact && !selectedContact.attributes.photo.data) && !avatarForUpload"
-                        flat
-                        icon="add"
-                        text-color="white"
-                        class="add-avatar"
-                        @click="updateAvatar()"
-                      />-->
                       <q-img v-if="(!selectedContact || selectedContact && !selectedContact.attributes.photo.data) && !avatarForUpload" :src="defaultAvatar" @click="updateAvatar()" class="test1" />
                       <q-img v-else-if="selectedContact.attributes.photo.data && selectedContact.attributes.photo.data.attributes" :src="`${apiBaseUrl}${selectedContact.attributes.photo.data.attributes.url}`" @click="updateAvatar()" class="test2" />
                       <q-img v-else :src="avatarUrl" @click="updateAvatar()" class="test3" />
                       <q-file v-model="avatarForUpload" ref="avatarPicker" class="hidden" @update:model-value="loadSelectedAvatar()" />
                     </q-avatar>
-                    <!--<q-item-label class="q-mt-xs" caption v-if="selectedContact && selectedContact.attributes && !selectedContact.attributes.photo.data"
-                      >Photo</q-item-label
-                    >-->
                   </q-card-section>
-                  <!--Name and Email-->
                   <q-card-section class="q-pl-none">
-                    <!--<q-input
-                      filled
-                      v-model="selectedContact.attributes.name"
-                      v-if="editMode"
-                    />
-                    <p v-else style="font-size: 18px">
-                      {{ selectedContact && selectedContact.attributes.name }}
-                    </p>-->
                     <Editable-Field label="Name" :original-value="selectedContact.attributes.name" :edit-mode="editMode" @value-updated="fieldUpdated" />
                   </q-card-section>
-                  <!--Edit button-->
                   <q-card-section v-if="editMode" class="q-pa-none">
                     <q-icon name="edit" @click="toggleEditMode()" size="sm"/>
                   </q-card-section>
                 </q-card-section>
                 <q-card-section class="q-pa-sm">
-                  <!--<q-input label="Street Address" stack-label outlined />-->
                   <Editable-Field label="Street Address" :original-value="selectedContact.attributes.streetAddress" :edit-mode="editMode" @value-updated="fieldUpdated" />
                 </q-card-section>
                 <q-card-section horizontal class="q-pa-sm">
-                  <!--<q-input v-if="editMode" label="City" stack-label outlined />
-                  <q-card-section v-else class="q-pa-none">
-                    <q-item-label caption>City</q-item-label>
-                    <q-item-label>Spokompton</q-item-label>
-                  </q-card-section>-->
                   <Editable-Field label="City" :original-value="selectedContact.attributes.city" :edit-mode="editMode" @value-updated="fieldUpdated" />
-                  <!--<Editable-Field label="State" :original-value="selectedContact.attributes.state" :edit-mode="editMode" @value-updated="fieldUpdated" />-->
                   <q-select :options="states" v-model="selectedContact.attributes.state" outlined label="State" stack-label class="q-mx-xs" style="min-width: 100px;"></q-select>
-                  <!--<q-input label="State" stack-label outlined class="q-mx-sm" />-->
                   <Editable-Field label="Zipcode" :original-value="selectedContact.attributes.zipcode" reduce-width :edit-mode="editMode" @value-updated="fieldUpdated" />
                 </q-card-section>
                 <q-card-section horizontal class="q-pa-sm justify-between">
@@ -158,7 +130,7 @@
             </q-card>
           </q-card-section>
         </q-card-section>
-      </q-card>
+      </q-card>-->
     </q-page>
   </template>
   
@@ -166,13 +138,16 @@
   import { defineComponent } from "vue"
   import { useAuthStore } from "stores/auth"
   import AccountToolbar from "components/AccountToolbar.vue"
+  import ContactRecord from "components/ContactRecord.vue"
   import EditableField from "components/EditableField.vue"
+  import utilities from "src/js/utilities"
   
   export default defineComponent({
     name: "ContactLookupPage",
     components: {
       AccountToolbar,
-      EditableField
+      ContactRecord
+      //EditableField
     },
     setup() {
       const store = useAuthStore()
