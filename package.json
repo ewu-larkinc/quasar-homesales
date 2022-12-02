@@ -8,10 +8,15 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "jest --verbose"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.20.2",
     "@quasar/extras": "^1.0.0",
+    "@vue/babel-preset-app": "^5.0.8",
+    "@vue/cli-plugin-unit-jest": "^5.0.8",
+    "@vue/test-utils": "^2.2.3",
+    "@vue/vue3-jest": "^27.0.0",
     "axios": "^0.21.1",
     "dotenv": "^16.0.3",
     "git": "^0.1.5",
